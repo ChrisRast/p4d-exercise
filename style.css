@@ -1,0 +1,24 @@
+* {box-sizing: border-box;
+    
+}
+
+.cmd {
+    width: 100%;   
+    height: 10vh;
+}
+.map {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.paths {
+    width: 30%;
+    border: 1px solid black;
+}
+
+#map {
+    width: 70%;
+    height: 90vh;
+}
