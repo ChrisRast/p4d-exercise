@@ -1,13 +1,14 @@
 jQuery(function () {
+    localStorage.setItem('pix4d', '[]')
     appendSavedPaths();
-    
+
     //Clears the current draw from the map
     jQuery('.clear').on('click', function () {
         var that = this;
         vector.getSource().clear();
         jQuery(that).trigger('dataCleared');
     }).on('dataCleared', function () {});
-    
+
     //Retrieves the current draw from the map and sends it to LocalStorage
     jQuery('.save').on('click', function () {
         var that = this;
@@ -18,7 +19,7 @@ jQuery(function () {
     }).on('dataSaved', function () {
         appendSavedPaths()
     });
-    
+
     //Loads the saved path from html and replaces the current draw + layer.
     jQuery('.saved').on('click', '.load', function () {
         var load = decodeURIComponent(jQuery(this).attr('data-href'));
@@ -35,7 +36,7 @@ jQuery(function () {
         map.addLayer(vector);
         addInteraction();
     });
-    
+
     //Deletes the saved path from html and updates LocalStorage accordingly
     jQuery('.saved').on('click', '.delete', function () {
         var id = jQuery(this).parent().attr('data-id');
@@ -53,6 +54,7 @@ jQuery(function () {
  * Creates original map and instantiate global variables
  */
 var source, style, vector, map;
+
 function createMap() {
 
     source = new ol.source.Vector({
@@ -111,6 +113,21 @@ function addInteraction() {
 };
 addInteraction();
 
+
+var paths = '[]';
+/**
+ * Returns every stored paths
+ * @returns {Array} Stored paths formatted in GeoJSON.
+ */
+function getLocalStorage() {
+    //if (localStorage.getItem('pix4d')) {
+        paths = JSON.parse(localStorage.getItem('pix4d'));
+    /*} else {
+        localStorage.setItem('pix4d', paths);
+    }*/
+    return paths;
+}
+
 /**
  * Gets the paths from LocalStorage and appends them to the sidebar
  */
@@ -120,20 +137,6 @@ function appendSavedPaths() {
     path.forEach(function (e, i) {
         jQuery('.saved').append('<li data-id="' + i + '">Path #' + i + ' <a data-href="' + encodeURIComponent(JSON.stringify(e)) + '" class="btn btn-default load">Load</a><a class="btn btn-default delete">Delete</a></li>');
     })
-}
-
-var paths = '[]';
-/**
- * Returns every stored paths
- * @returns {Array} Stored paths formatted in GeoJSON.
- */
-function getLocalStorage() {
-    if (localStorage.getItem('pix4d')) {
-        paths = JSON.parse(localStorage.getItem('pix4d'));
-    } else {
-        localStorage.setItem('pix4d', paths);
-    }
-    return paths;
 }
 
 /**
