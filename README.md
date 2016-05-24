@@ -1,2 +1,7 @@
 # p4d-exercise
-http://stackoverflow.com/a/18197511
+
+For the exercise, the bower directory was included in the commit for an easier setup and demo.
+
+##Run##
+
+Clone and open index.html in your favorite modern browser.
