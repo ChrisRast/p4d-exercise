@@ -5,12 +5,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap 101 Template</title>
+    <title>P4D</title>
 
     <!-- Bootstrap -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.16.0/ol.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.16.0/ol-debug.css" rel="stylesheet">
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
 </head>
 
@@ -19,6 +17,7 @@
         <h1>Pix4D Exercise</h1>
         <a class="btn btn-default save">Save this path</a>
         <a class="btn btn-default clear">Clear this path</a>
+
     </header>
     <section class="map">
         <div id="map"></div>
@@ -26,14 +25,14 @@
         <aside class="paths">
             <h2>Saved paths</h2>
             <ul class="saved">
+                <li data-id="">Path #1 <a data-href="" class="btn btn-default load">Load</a></li>
             </ul>
 
         </aside>
     </section>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+<!--    <script src="bower_components/openlayers/lib/OpenLayers.js"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.16.0/ol.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.16.0/ol-debug.js"></script>
     <script src="script.js"></script>
 </body>
 

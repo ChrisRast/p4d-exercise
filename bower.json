@@ -1,0 +1,8 @@
+{
+  "name": "p4d-exercise",
+  "dependencies": {
+    "jquery": "~2.2.4",
+    "bootstrap": "~3.3.6",
+    "openlayers": "*"
+  }
+}

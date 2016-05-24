@@ -1,19 +1,47 @@
 jQuery(function () {
     jQuery('.clear').on('click', function () {
         map.once('postcompose', function (event) {
-            vector.getSource().clear();
-            setLocalStorage(data);
+            map.getLayers().clear();
+            //            vector.getSource().clear();
         });
     });
     jQuery('.save').on('click', function () {
+        var that = this;
         map.once('postcompose', function (event) {
+            //            jQuery(that).off();
             var geojson = new ol.format.GeoJSON();
-            var data = geojson.writeFeatures(vector.getSource().getFeatures());
+//            var data = "";
+            geojson.writeFeatures(map.getLayers().getSource().getFeatures());
+            map.getLayers().forEach(function(e){
+                data += geojson.writeFeatures(e.getSource().getFeatures());
+            });//TODO
+            //            nbPaths++;
+            //            jQuery(that).attr('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data)).attr('download', 'path'+ nbPaths + '.json').click();
             setLocalStorage(data);
+            jQuery(that).trigger('dataSaved');
         });
+    }).on('dataSaved', function () {
+        appendSavedPaths()
     });
     appendSavedPaths();
+    jQuery('.saved').on('click', '.load', function () {
+        //        jQuery.getJSON('paths/path1.json', function(json){
+        //            var geojson = new ol.format.GeoJSON();
+        //            var features = geojson.read
+        //        });
+        var load = decodeURIComponent(jQuery(this).attr('data-href'));
+        var vectorSource = new ol.source.Vector({
+            features: (new ol.format.GeoJSON()).readFeatures(load)
+        });
+        var vectorLayer = new ol.layer.Vector({
+            source: vectorSource,
+            style: style
+        });
+        map.addLayer(vectorLayer);
+    })
 });
+
+var nbPaths = 0;
 
 var source = new ol.source.Vector({
     wrapX: false
@@ -68,21 +96,22 @@ addInteraction();
 
 function appendSavedPaths() {
     var path = getLocalStorage();
+    jQuery('.saved').empty();
     path.forEach(function (e, i) {
-        jQuery('.saved').append('<li data-id="' + i + '">Path #' + i + 1 + '<span class="btn btn-default load">Load</span></li>');
+        jQuery('.saved').append('<li data-id="' + i + '">Path #' + i + ' <a data-href="' + encodeURIComponent(JSON.stringify(e)) + '" class="btn btn-default load">Load</a></li>');
     })
 }
 
-var paths;
+var paths = '[]';
 /**
  * Returns every stored paths
  * @returns {Array} Stored paths formatted to GeoJSON.
  */
 function getLocalStorage() {
-    if (localStorage.pix4d) {
-        paths = localStorage.pix4d.parse();
+    if (localStorage.getItem('pix4d')) {
+        paths = JSON.parse(localStorage.getItem('pix4d'));
     } else {
-        localStorage.pix4d = "[]";
+        localStorage.setItem('pix4d', paths);
     }
     return paths;
 }
@@ -92,9 +121,8 @@ function getLocalStorage() {
  * @param {object} JSONdraw GeoJSON-based object.
  */
 function setLocalStorage(JSONdraw) {
-    var values, local;
-    local = localStorage.pix4d;
-    values = local.parse();
-    values.push(JSONdraw.parse());
-    localStorage.pix4d = values.stringify();
+    var local;
+    local = JSON.parse(localStorage.getItem('pix4d'));
+    local.push(JSON.parse(JSONdraw));
+    localStorage.setItem('pix4d', JSON.stringify(local));
 }
